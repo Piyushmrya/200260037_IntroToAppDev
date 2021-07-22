@@ -1,0 +1,117 @@
+import 'package:flutter/material.dart';
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  // This widget is the root of your application.
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Quiz Demo',
+      home: MyHomePage(title: 'Quiz Time',),
+    );
+  }
+}
+
+class MyHomePage extends StatefulWidget {
+  MyHomePage({Key? key, required this.title}) : super(key: key);
+
+  final String title;
+
+  @override
+  _MyHomePageState createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+  int i = 0; int j=0; String text = '';
+var question = [
+  "1. - A leap year have 366 days .","2. -  Sheeps are called the ship of desert .",
+  '3. - Sun rises from the west .','4. Elephant is the largest mammal on land.',
+  '5. Plants needs sunlight for performing photosynthesis .','6. There are seven continents in world . ',
+  '7. India is the smallest democratic Country in the world .','8. Hundred years makes a century . ',
+  '9. Newyork is the capital of America .','10. 36 is a prime number .'
+];
+
+  void Next () {
+    setState(() {
+      i++;
+      children: <Widget>[
+        Text(
+            question[i], style : TextStyle( fontSize: 26,)
+          //style: Theme.of(context).textTheme.headline4,
+        ),
+        Row( mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: RaisedButton(onPressed: (){ verifyT(); if(i>=9){i=0;}else{ Next();} }, child: Text('True'),),
+            ),
+            RaisedButton(onPressed: (){ verifyF(); if(i>=9){i=0;} else{ Next();} }, child: Text('False'),),
+          ],
+        ),
+        Column(
+          children: [
+            Container(
+              alignment:Alignment.centerRight,
+              padding: EdgeInsets.fromLTRB(10,20,10,0),
+              child : Text(text,style: TextStyle(fontSize:30)),
+            ),
+          ],
+        )
+      ];
+    });
+  }
+  void verifyT () {
+   setState(() {
+    if(i==0 || i==3 || i==4|| i==5 || i==7){ text = ' Correct ';} else {text ='Incorrect';}
+    Future.delayed( const Duration ( milliseconds:2000 ),(){
+      setState( (){ text = ' '; } );
+    } );
+   });
+  }
+  void verifyF () {
+    setState(() {
+      if(i==1||i==2||i==6||i==8||i==9){ text = 'Correct ';}else {text ='Incorrect';}
+      Future.delayed( const Duration ( milliseconds:2000 ),(){
+        setState( (){ text = ' '; } );
+      } );
+    });
+  }
+  @override
+  Widget build(BuildContext context) {
+   
+    return Scaffold( backgroundColor: Colors.black,
+      appBar: AppBar(
+        title: Text(widget.title),
+      ),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center ,
+        children: <Widget>[
+          Text(
+              question[i], style : TextStyle( fontSize: 26,color:Colors.white )
+            //style: Theme.of(context).textTheme.headline4,
+          ),
+          Row( mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: RaisedButton(onPressed: (){ verifyT(); Future.delayed( const Duration ( milliseconds:2200 ),(){
+                setState( (){ if(i>=9){i=0;} else{ Next();}  } );
+                } );  }, child: Text('True'),color:Colors.lightGreenAccent,),
+              ),
+              RaisedButton(onPressed: (){ verifyF(); Future.delayed( const Duration ( milliseconds:2200 ),(){
+              setState( (){ if(i>=9){i=0;} else{ Next();}  } );
+              } ); }, child: Text('False'),color: Colors.redAccent,),
+            ],
+          ),
+          Container(
+          child : Text(text,style : TextStyle( fontSize: 16,color:Colors.white )),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
